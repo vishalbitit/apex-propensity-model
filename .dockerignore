@@ -1,0 +1,57 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# .dockerignore — Files to EXCLUDE when building the Docker image
+#
+# Works exactly like .gitignore but for Docker.
+# Docker won't copy these files into the image — keeps image size small.
+# ─────────────────────────────────────────────────────────────────────────────
+
+# Virtual environment — container has its own Python, no need for this
+venv/
+.venv/
+env/
+
+# Generated data files — container generates these fresh at runtime
+data/
+
+# Trained model files — container trains these fresh
+models/
+
+# Generated reports/plots — container creates these at runtime
+reports/
+
+# Python cache files — not needed inside container
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Jupyter notebooks (if any)
+*.ipynb
+.ipynb_checkpoints/
+
+# OS junk files
+.DS_Store
+Thumbs.db
+
+# Git files — not needed inside container
+.git/
+.gitignore
+
+# IDE config files
+.vscode/
+.idea/
+*.code-workspace
+
+# Documentation files — not needed for running the model
+*.docx
+*.xlsx
+*.pdf
+
+# Test files (if any)
+tests/
+test_*.py
+
+# Logs
+*.log
+logs/

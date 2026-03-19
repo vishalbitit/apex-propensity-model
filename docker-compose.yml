@@ -1,0 +1,53 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# docker-compose.yml — Apex Securities Propensity Model
+#
+# WHAT IS DOCKER COMPOSE?
+#   docker-compose is a tool that makes running Docker containers easier.
+#   Instead of typing long "docker run" commands, you define everything here
+#   and run it with a single short command.
+#
+# HOW TO USE:
+#   docker-compose run propensity-model generate    → generate dataset
+#   docker-compose run propensity-model train       → train models
+#   docker-compose run propensity-model evaluate    → evaluate models
+#   docker-compose run propensity-model predict     → score customers
+#   docker-compose run propensity-model all         → full pipeline
+#
+# WHY USE VOLUMES?
+#   Volumes connect a folder on YOUR laptop to a folder INSIDE the container.
+#   This means: data/, models/, reports/ created inside the container
+#   automatically appear on your laptop too. Without volumes, all
+#   generated files disappear when the container stops.
+# ─────────────────────────────────────────────────────────────────────────────
+
+version: '3.8'
+
+services:
+  propensity-model:
+    # Build the image from our Dockerfile in the current folder
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    # Give the container a friendly name
+    container_name: apex-propensity-model
+
+    # ── Volumes: sync folders between your laptop and the container ───────────
+    # Format: "laptop_folder:container_folder"
+    # Whatever the container writes to /app/data also appears in ./data on laptop
+    volumes:
+      - ./data:/app/data         # dataset CSVs
+      - ./models:/app/models     # trained .pkl model files
+      - ./reports:/app/reports   # evaluation plots and decile tables
+
+    # ── Environment variables ─────────────────────────────────────────────────
+    environment:
+      - PYTHONUNBUFFERED=1       # Ensures logs show up in real-time
+
+    # ── Resource limits (optional) ────────────────────────────────────────────
+    # Uncomment to limit container resources on shared machines
+    # deploy:
+    #   resources:
+    #     limits:
+    #       memory: 4G
+    #       cpus: '2.0'
